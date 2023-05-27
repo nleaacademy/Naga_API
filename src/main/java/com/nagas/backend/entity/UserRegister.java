@@ -41,7 +41,7 @@ public class UserRegister {
     @Column(
             name = "mobileno"
     )
-    private int mobileNo;
+    private long mobileNo;
     @Column(
             name = "role"
     )

@@ -167,9 +167,39 @@ public class RegisterService {
                 });
                 response.setSubscriber(subscriber);
             }
-        }catch(Exception e){
-            log.info("Exception in convert to admin method:"+e.getMessage());
+        } catch (Exception e) {
+            log.info("Exception in convert to admin method:" + e.getMessage());
         }
         return response;
+    }
+
+    public LoginResponse getRegisterById(int id) {
+        log.info("Entering the getRegisterById method");
+        LoginResponse res = new LoginResponse();
+        try {
+            Optional<UserRegister> user = registerRepository.findById(id);
+            if (user.isPresent()) {
+                res.setEmailId(user.get().getEmailId());
+                res.setMobileNo(user.get().getMobileNo());
+                res.setUserName(getRegisterNo());
+            }
+        } catch (Exception e) {
+            log.info("Exception in getRegisterById method:" + e.getMessage());
+        }
+
+        return res;
+    }
+
+    private String getRegisterNo() {
+        String rno = "";
+        Date d = new Date();
+        int year = d.getYear();
+        int currentYear = year + 1900;
+        int month = d.getMonth();
+        Random rand = new Random();
+        int random = rand.nextInt(90) + 10; //generates random no. between 10 and 100
+        System.out.println(random);
+        rno = "NLEA" + currentYear + month + random;
+        return rno;
     }
 }

@@ -10,7 +10,7 @@ import com.nagas.backend.repository.ApplicationRepository;
 import com.nagas.backend.repository.EmailTemplateRepository;
 import com.nagas.backend.repository.RegisterRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +116,7 @@ public class ApplicationService {
         application.setCourse(request.getCourse());
         application.setDepartment(request.getDepartment());
         application.setUser(user);
+        //application.setSubId();
         return application;
     }
 
@@ -138,9 +139,14 @@ public class ApplicationService {
         return response;
     }
 
-    public List<ApplicationRequest> getAllApplication() {
+    public List<ApplicationRequest> getAllApplication(Integer subId) {
         List<ApplicationRequest> response = null;
-        List<Application> application = applicationRepository.findAll();
+        List<Application> application = applicationRepository.findBySubId(subId);
+        if (!CollectionUtils.isEmpty(application)) {
+            application = applicationRepository.findBySubId(subId);
+        } else {
+            application = applicationRepository.findAll();
+        }
         response = convertToResponse(application);
         return response;
 
@@ -152,21 +158,24 @@ public class ApplicationService {
         application.stream().forEach(s -> {
 
 
-            ApplicationRequest response = new ApplicationRequest();
-            response.setId(s.getId());
-            response.setDepartment(s.getDepartment());
-            response.setCourse(s.getCourse());
-            response.setEducation(s.getEducation());
-            response.setInstituteName(s.getInstituteName());
-            response.setEmailId(s.getEmailId());
-            response.setUserId(s.getUser().getId());
-            response.setRegisterNo(s.getRegisterNo());
-            response.setInstituteName(s.getInstituteName());
-            response.setStudentName(s.getStudentName());
-            //need to change
-            AttachedResponse attached = convertToApplicationAttachment(applicationAttachmentRepository.findByUserId(s.getUser().getId()));
-            response.setBonafide(attached);
-            app.add(response);
+                ApplicationRequest response = new ApplicationRequest();
+                response.setId(s.getId());
+                response.setDepartment(s.getDepartment());
+                response.setCourse(s.getCourse());
+                response.setEducation(s.getEducation());
+                response.setInstituteName(s.getInstituteName());
+                response.setEmailId(s.getEmailId());
+                response.setUserId(s.getUser().getId());
+                response.setRegisterNo(s.getRegisterNo());
+                response.setInstituteName(s.getInstituteName());
+                response.setStudentName(s.getStudentName());
+                response.setMobileNo(s.getMobileNo());
+                //need to change
+                AttachedResponse attached = convertToApplicationAttachment(applicationAttachmentRepository.findByUserId(s.getUser().getId()));
+                response.setBonafide(attached);
+                app.add(response);
+
+
         });
         return app;
     }
@@ -204,6 +213,18 @@ public class ApplicationService {
 
     public ApplicationAttachment getFile(int fileId) {
         return applicationAttachmentRepository.findById(fileId).get();
+    }
+
+    public String saveSubscribe(int subId, List<Integer> appId) {
+        String response = "";
+        log.info("Entring the saveSubscribe method");
+        appId.stream().forEach(id -> {
+            log.info("AppId;" + id);
+            applicationRepository.saveSubscribeId(subId, id);
+        });
+        response = "Saved";
+
+        return response;
     }
 }
 

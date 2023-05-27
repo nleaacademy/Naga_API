@@ -12,7 +12,7 @@ public class ApplicationRequest {
     private String instituteName;
     private String course;
     private String department;
-    private int mobileNo;
+    private long mobileNo;
     private String emailId;
     private int userId;
  private AttachedResponse bonafide;

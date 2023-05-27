@@ -9,7 +9,7 @@ public class LoginResponse {
     private String password;
     private String confirmPassword;
     private String emailId;
-    private int mobileNo;
+    private long mobileNo;
     private String role;
     private String status;
     private String message;

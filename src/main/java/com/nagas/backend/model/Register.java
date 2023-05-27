@@ -9,6 +9,6 @@ public class Register {
     private String password;
     private String confirmPassword;
     private String emailId;
-    private int mobileNo;
+    private long mobileNo;
     private String role;
 }

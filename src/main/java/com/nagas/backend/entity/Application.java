@@ -28,7 +28,7 @@ public class Application {
     private String education;
 
     @Column(name = "mobileno")
-    private int mobileNo;
+    private long mobileNo;
 
     @Column(name = "mailid")
     private String emailId;
@@ -52,6 +52,9 @@ public class Application {
 
     @OneToOne
     private UserRegister user;
+
+    @Column(name = "subId")
+    private int subId;
 
 
 //    @OneToMany(cascade = CascadeType.ALL)

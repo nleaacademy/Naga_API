@@ -1,6 +1,7 @@
 package com.nagas.backend.controller;
 
 import com.nagas.backend.model.AdminResponse;
+import com.nagas.backend.model.LoginResponse;
 import com.nagas.backend.model.Register;
 import com.nagas.backend.services.RegisterService;
 
@@ -47,5 +48,20 @@ public class RegisterController {
        log.info("Leaving the getall method");
        return response;
     }
+
+    @GetMapping("/registerDetails/{id}")
+    public LoginResponse getRegisterDetails(@PathVariable("id") int id){
+        log.info("Entering the getRegisterDetails method");
+        LoginResponse response = null;
+        try{
+            response = service.getRegisterById(id);
+        }catch(Exception e){
+            log.info("Exception in getRegisterDetails method:"+e.getMessage());
+        }
+        log.info("Leaving the getall method");
+        return response;
+    }
+
+
 }
 

@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
+
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 @RestController
@@ -25,61 +27,62 @@ public class ApplicationController {
     @Autowired
     private ApplicationService service;
 
-    @PostMapping(value= "/application/save")
-    public String saveApplication(@RequestBody ApplicationRequest request){
-        System.err.println("REquest:"+request.getStudentName());
-        log.info("Entering the saveApplication method:"+request.getStudentName());
+    @PostMapping(value = "/application/save")
+    public String saveApplication(@RequestBody ApplicationRequest request) {
+        System.err.println("REquest:" + request.getStudentName());
+        log.info("Entering the saveApplication method:" + request.getStudentName());
         String save = null;
-        try{
-            save   = service.saveApplication(request);
-        }catch(Exception e){
-            log.info("Exception in saveApplication:"+e);
+        try {
+            save = service.saveApplication(request);
+        } catch (Exception e) {
+            log.info("Exception in saveApplication:" + e);
         }
-        log.info("Leaving the saveApplication method:"+request.getStudentName());
+        log.info("Leaving the saveApplication method:" + request.getStudentName());
         return save;
     }
+
     @PostMapping("/application/update")
-    public String updateApplication(@RequestBody ApplicationRequest request){
-        log.info("Entering the updateApplication method:"+request.getStudentName());
+    public String updateApplication(@RequestBody ApplicationRequest request) {
+        log.info("Entering the updateApplication method:" + request.getStudentName());
         String update = null;
-        try{
-            update   = service.updateApplication(request);
-        }catch(Exception e){
-            log.info("Exception in updateApplication:"+e);
+        try {
+            update = service.updateApplication(request);
+        } catch (Exception e) {
+            log.info("Exception in updateApplication:" + e);
         }
-        log.info("Leaving the updateApplication method:"+request.getStudentName());
+        log.info("Leaving the updateApplication method:" + request.getStudentName());
         return update;
 
     }
 
-   @GetMapping("/application/getByUserId/{userId}")
-    public ApplicationResponse getApplicationDetails(@PathVariable("userId") Integer id){
-        log.info("Entering the getApplicationDetails method:"+id);
-       ApplicationResponse response = null;
-        try{
-            response   = service.getApplication(id);
-        }catch(Exception e){
-            log.info("Exception in getApplicationDetails method:"+e.getMessage());
+    @GetMapping("/application/getByUserId/{userId}")
+    public ApplicationResponse getApplicationDetails(@PathVariable("userId") Integer id) {
+        log.info("Entering the getApplicationDetails method:" + id);
+        ApplicationResponse response = null;
+        try {
+            response = service.getApplication(id);
+        } catch (Exception e) {
+            log.info("Exception in getApplicationDetails method:" + e.getMessage());
         }
-       log.info("Leaving the getApplicationDetails method");
-       return response;
+        log.info("Leaving the getApplicationDetails method");
+        return response;
     }
 
-    @GetMapping("/application/getAllStudentDetails")
-    public List<ApplicationRequest> getAllStudentDetails(){
+    @GetMapping("/application/getAllStudentDetails/{subId}")
+    public List<ApplicationRequest> getAllStudentDetails(@PathVariable("subId") Integer subId) {
         log.info("Entering the getAllStudentDetails methods");
         List<ApplicationRequest> response = null;
-        try{
-            response = service.getAllApplication();
-        }catch(Exception e){
-            log.info("Exception in getAllStudentDetails method:"+e.getMessage());
+        try {
+            response = service.getAllApplication(subId);
+        } catch (Exception e) {
+            log.info("Exception in getAllStudentDetails method:" + e.getMessage());
         }
         log.info("Leaving the getAllStudentDetails methods");
         return response;
     }
 
     @PostMapping("/application/uploadImage/{userId}")
-    public String handleFileUpload(@PathVariable int userId , @RequestParam("file") MultipartFile file) {
+    public String handleFileUpload(@PathVariable int userId, @RequestParam("file") MultipartFile file) {
         return service.store(file, userId);
     }
 
@@ -92,5 +95,12 @@ public class ApplicationController {
                 .contentType(MediaType.parseMediaType(dbFile.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
                 .body(new ByteArrayResource(dbFile.getContent()));
+    }
+
+    @GetMapping("/application/savesubcribe/{subId}/{appId}")
+    public String saveSubscribe(@PathVariable("subId") int subId, @PathVariable("appId") List<Integer> appId) {
+        String response;
+        response = service.saveSubscribe(subId, appId);
+        return response;
     }
 }

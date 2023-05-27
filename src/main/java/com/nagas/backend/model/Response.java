@@ -6,7 +6,7 @@ import lombok.Data;
 public class Response {
     public int applicationId;
     public String studentName;
-    public int mobileNo;
+    public long mobileNo;
     public String emailId;
     public String educationType;
 }
