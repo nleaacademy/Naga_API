@@ -41,10 +41,10 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         continue-on-error: true
-#        with:
-#          name: java-app
+        with:
+          name: java-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App 
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
@@ -52,3 +52,5 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0E694C1C71A44DB7B2169DB308184A61 }}
           package: '*.war'
+
+
