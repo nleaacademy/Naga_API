@@ -40,8 +40,9 @@ jobs:
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
-        with:
-          name: java-app
+        continue-on-error: true
+#        with:
+#          name: java-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
