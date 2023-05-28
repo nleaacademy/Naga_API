@@ -103,4 +103,9 @@ public class ApplicationController {
         response = service.saveSubscribe(subId, appId);
         return response;
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "NLEA Testing";
+    }
 }
